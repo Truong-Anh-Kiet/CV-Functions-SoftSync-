@@ -1,0 +1,13 @@
+{
+  "id": "mlp_base_gte_base",
+  "display_name": "[Multi-view with Cross-view] MLP Base (gte-base)",
+  "architecture_class": "AdvancedFusionMLP_Base",
+  "sbert_id": "thenlper/gte-base",
+  "source_folder": "[Multi-view with Cross-view]MLP_Base_thenlpergte-base",
+  "original_weight_filename": "mlp_best_model.pth",
+  "input_shape": "[B, 50]",
+  "constructor_kwargs": {"input_dim": 50},
+  "metrics": {"f1": 0.9200, "mae": 0.2468, "best_val_loss": 0.2472},
+  "is_default": true,
+  "notes": "Default model. Simple sequential MLP: Linear -> BN -> ReLU -> Dropout -> Linear -> ReLU -> Linear -> ReLU -> Linear -> Sigmoid. Highest F1."
+}

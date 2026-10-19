@@ -1,0 +1,12 @@
+{
+  "id": "attention_gte_base",
+  "display_name": "[Multi-view with Cross-view] Attention (gte-base)",
+  "architecture_class": "AttentionFusionModel",
+  "sbert_id": "thenlper/gte-base",
+  "source_folder": "[Multi-view with Cross-view]Attention_thenlpergte-base",
+  "original_weight_filename": "proposed _model_attention.pth",
+  "input_shape": "[B, 50]",
+  "constructor_kwargs": {"num_views": 50, "d_model": 64, "nhead": 8},
+  "metrics": {"f1": 0.8673, "mae": 0.2071, "best_val_loss": 0.3157},
+  "notes": "TransformerEncoder (3 layers, nhead=8) on the 50-token similarity sequence."
+}

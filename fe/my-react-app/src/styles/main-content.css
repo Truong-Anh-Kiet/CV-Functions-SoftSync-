@@ -1,0 +1,80 @@
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.content-header {
+  height: 80px;
+  background: white;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding: 0 50px;
+}
+
+.content-header h1 { font-size: 24px; color: var(--text-dark); font-weight: 800; }
+
+.content-header-searching {
+  justify-content: flex-start;
+}
+
+.header-search-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.header-search-button {
+  width: 210px;
+  min-height: 44px;
+  padding: 0 22px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  background: white;
+  color: var(--text-dark);
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.header-search-button:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: var(--primary-light);
+}
+
+.header-search-button.active {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(8, 145, 178, 0.25);
+}
+
+@media (max-width: 680px) {
+  .header-search-actions {
+    width: 100%;
+  }
+
+  .header-search-button {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+}
+
+.content-body { flex: 1; padding: 40px 50px; overflow-y: auto; }
+
+.toast-notify { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #059669; color: white; padding: 16px 30px; border-radius: 16px; box-shadow: 0 20px 40px rgba(5, 150, 105, 0.2); z-index: 13000; font-weight: 600; animation: slideDown 0.3s ease-out; }
+@keyframes slideDown { from { transform: translate(-50%, -18px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+
+.placeholder { text-align: center; padding-top: 100px; color: var(--text-gray); }

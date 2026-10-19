@@ -1,0 +1,12 @@
+{
+  "id": "weighted_sum_careerbert",
+  "display_name": "[Multi-view with Cross-view] WeightedSum (careerbert-g)",
+  "architecture_class": "WeightedSumFusion",
+  "sbert_id": "lwolfrum2/careerbert-g",
+  "source_folder": "[Multi-view with Cross-view]WeightedSum_lwolfrum2careerbert-g",
+  "original_weight_filename": "weighted_sum_best_model.pth",
+  "input_shape": "[B, 50]",
+  "constructor_kwargs": {"input_dim": 50},
+  "metrics": {"f1": 0.8789, "mae": 0.2031, "best_val_loss": 0.2893},
+  "notes": "Smallest model (~51 params): Linear(50 -> 1) + Sigmoid. Uses careerbert-g embeddings (recruitment domain)."
+}

@@ -1,0 +1,12 @@
+{
+  "id": "mlp_residual_bge_base",
+  "display_name": "[Multi-view with Cross-view] MLP Residual (bge-base-en-v1.5)",
+  "architecture_class": "AdvancedFusionMLP_Residual",
+  "sbert_id": "BAAI/bge-base-en-v1.5",
+  "source_folder": "[Multi-view with Cross-view]MLP_Residual_BAAIbge-base-en-v1.5",
+  "original_weight_filename": "proposed_model_MLPResidual.pth",
+  "input_shape": "[B, 50]",
+  "constructor_kwargs": {"input_dim": 50},
+  "metrics": {"f1": 0.9187, "mae": 0.2502, "best_val_loss": 0.2423},
+  "notes": "MLP with 2 residual blocks (LayerNorm + Linear + ReLU + skip). Uses BAAI bge-base-en-v1.5 embeddings."
+}

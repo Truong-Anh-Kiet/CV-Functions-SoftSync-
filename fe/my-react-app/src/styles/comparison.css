@@ -1,0 +1,570 @@
+/* CV Comparison — head-to-head 2 CV vs 1 JD. Compact, ít cuộn. */
+
+.cmp-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---------- Control bar ---------- */
+.cmp-controlbar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 12px 18px;
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+}
+
+.cmp-controlbar-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cmp-controlbar-field > span {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cmp-controlbar-select {
+  height: 32px;
+  padding: 0 28px 0 10px;
+  font-size: 13px;
+  min-width: 200px;
+  max-width: 260px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.cmp-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--danger-color);
+}
+
+.cmp-count.ok {
+  color: var(--success-color);
+}
+
+.cmp-elapsed {
+  font-size: 12px;
+  color: var(--text-gray);
+  font-variant-numeric: tabular-nums;
+}
+
+.cmp-controlbar-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.cmp-run-btn {
+  width: auto;
+  min-width: 160px;
+  height: 36px;
+  padding: 0 18px;
+  margin-top: 0;
+}
+
+.cmp-run-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- Preview row 3 cột (cũng là input surface ở setup) ---------- */
+.cmp-preview-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.cmp-doc {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cmp-doc-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.cmp-doc-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.cmp-doc-name {
+  font-size: 12px;
+  color: var(--text-gray);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cmp-doc-body {
+  position: relative;
+  height: 46vh;
+  background: #f8fafc;
+}
+
+.cmp-doc-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.cmp-doc-text {
+  height: 100%;
+  overflow-y: auto;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-dark);
+  white-space: pre-wrap;
+}
+
+.cmp-doc-empty {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--text-gray);
+  text-align: center;
+  padding: 12px;
+}
+
+.cmp-doc-open {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(15, 23, 42, 0.78);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cmp-doc-open:hover {
+  background: rgba(15, 23, 42, 0.92);
+}
+
+.cmp-doc-clear {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--danger-color);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.cmp-doc-clear:hover:not(:disabled) {
+  background: #fef2f2;
+}
+
+/* ---------- Input ngay trong khung (upload / chọn từ kho / JD) ---------- */
+.cmp-slot-input {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 18px;
+}
+
+.cmp-slot-drop {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 22px 16px;
+  border: 2px dashed var(--border-color);
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  color: var(--text-gray);
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.cmp-slot-drop:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: var(--primary-light);
+}
+
+.cmp-slot-drop strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cmp-slot-or {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-gray);
+  font-size: 12px;
+}
+
+.cmp-slot-or::before,
+.cmp-slot-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-color);
+}
+
+.cmp-slot-select {
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  font-size: 13px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text-dark);
+  cursor: pointer;
+}
+
+.cmp-slot-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* JD trong khung */
+.cmp-jd-tabs {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  background: var(--bg-gray);
+  border-radius: 8px;
+}
+
+.cmp-jd-tabs button {
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-gray);
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cmp-jd-tabs button.active {
+  background: #fff;
+  color: var(--primary-color);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+.cmp-jd-textarea {
+  width: 100%;
+  height: 100%;
+  border: none;
+  resize: none;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-dark);
+  font-family: inherit;
+  background: #fff;
+  outline: none;
+}
+
+/* ---------- Result ---------- */
+.cmp-result {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cmp-verdict {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--success-color);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cmp-verdict.is-close {
+  border-left-color: #f59e0b;
+}
+
+.cmp-verdict-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cmp-verdict-badge {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.cmp-verdict-badge.win {
+  color: #047857;
+}
+
+.cmp-verdict-badge.warn {
+  color: #b45309;
+}
+
+.cmp-verdict-margin {
+  font-size: 13px;
+  color: var(--text-gray);
+  font-variant-numeric: tabular-nums;
+}
+
+.cmp-verdict-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.cmp-cand {
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cmp-cand.winner {
+  border-color: var(--success-color);
+  background: #f0fdf4;
+}
+
+.cmp-cand-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cmp-cand-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-gray);
+  letter-spacing: 0.05em;
+}
+
+.cmp-cand-star {
+  font-size: 11px;
+  font-weight: 700;
+  color: #047857;
+}
+
+.cmp-cand-name {
+  font-size: 14px;
+  color: var(--text-dark);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cmp-cand-stats {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--text-gray);
+}
+
+.cmp-cand-stats b {
+  color: var(--text-dark);
+}
+
+.cmp-tag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.cmp-tag.matched {
+  color: #047857;
+  background: #d1fae5;
+}
+
+.cmp-tag.mismatch {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+.cmp-cand-detail {
+  align-self: flex-start;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+.cmp-cand-detail:hover {
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+}
+
+.cmp-verdict-notes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.cmp-notes-col h4 {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.cmp-notes-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cmp-notes-col li {
+  font-size: 12px;
+  color: var(--text-gray);
+  padding-left: 14px;
+  position: relative;
+}
+
+.cmp-notes-col li::before {
+  content: '•';
+  position: absolute;
+  left: 2px;
+  color: var(--primary-color);
+}
+
+.cmp-notes-empty {
+  font-size: 12px;
+  color: var(--text-gray);
+  font-style: italic;
+}
+
+/* ---------- Dimension grid ---------- */
+.cmp-grid-wrap {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cmp-grid {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cmp-grid th,
+.cmp-grid td {
+  padding: 10px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+}
+
+.cmp-grid thead th {
+  background: var(--bg-gray);
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.cmp-grid-cv {
+  text-align: center;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cmp-grid-label {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.cmp-grid-cell {
+  text-align: center;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.cmp-grid-cell.good { color: #047857; }
+.cmp-grid-cell.mid { color: #b45309; }
+.cmp-grid-cell.low { color: #b91c1c; }
+
+.cmp-grid-cell.win {
+  background: #f0fdf4;
+}
+
+.cmp-grid tbody tr:last-child th,
+.cmp-grid tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ---------- Collapsible preview in result phase ---------- */
+.cmp-preview-collapse {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cmp-preview-row.slim .cmp-doc-body {
+  height: 30vh;
+}
+
+@media (max-width: 1024px) {
+  .cmp-preview-row {
+    grid-template-columns: 1fr;
+  }
+  .cmp-doc-body {
+    height: 38vh;
+  }
+  .cmp-verdict-cards,
+  .cmp-verdict-notes {
+    grid-template-columns: 1fr;
+  }
+}

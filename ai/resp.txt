@@ -1,0 +1,1 @@
+{"detail":"Unknown model_id: 'bogus_id'. Available: ['attention_gte_base', 'mlp_base_gte_base', 'mlp_residual_bge_base', 'weighted_sum_careerbert']"}

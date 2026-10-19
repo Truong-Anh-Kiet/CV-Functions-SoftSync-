@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Notebook scratch / large temp
+*.tmp
+*.log
+
+# Keep checkpoints (.pth) and results tracked — they are the experiment artifacts.

@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+pydantic-settings
+python-dotenv
+python-multipart
+PyMuPDF
+openai
+torch>=2.1,<2.4
+numpy<2
+transformers==4.44.2
+sentence-transformers==3.0.1

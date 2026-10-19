@@ -1,0 +1,228 @@
+.sidebar {
+  width: 260px;
+  background: white;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  z-index: 10;
+  position: relative;
+  transition: width 0.25s ease, padding 0.25s ease;
+}
+
+.sidebar-collapsed {
+  width: 72px;
+  padding: 24px 10px;
+}
+
+/* Toggle button on the right edge */
+.sidebar-toggle {
+  position: absolute;
+  top: 28px;
+  right: -12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: white;
+  color: var(--text-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+  transition: color 0.15s, border-color 0.15s, transform 0.15s;
+  z-index: 11;
+  padding: 0;
+}
+
+.sidebar-toggle svg {
+  width: 14px;
+  height: 14px;
+}
+
+.sidebar-toggle:hover {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* Brand */
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+  padding: 0 6px;
+  min-height: 40px;
+}
+
+.sidebar-collapsed .sidebar-brand {
+  justify-content: center;
+  padding: 0;
+}
+
+.logo-icon {
+  background: var(--primary-color);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.sidebar-brand h2 {
+  color: var(--text-dark);
+  font-size: 18px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Nav */
+.sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.menu-button {
+  width: 100%;
+  padding: 11px 14px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-gray);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.menu-button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.menu-button-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.menu-button-label {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar-collapsed .menu-button {
+  justify-content: center;
+  padding: 11px 0;
+}
+
+.menu-button:hover {
+  background: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.menu-button.active {
+  background: var(--primary-color);
+  color: white;
+  box-shadow: 0 6px 12px -4px rgba(8, 145, 178, 0.4);
+}
+
+/* Footer */
+.sidebar-footer {
+  padding-top: 18px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-collapsed .sidebar-footer {
+  align-items: center;
+}
+
+.user-profile {
+  padding: 10px 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.user-name {
+  display: block;
+  font-weight: 700;
+  color: var(--text-dark);
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-email {
+  display: block;
+  font-size: 12px;
+  color: var(--text-gray);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: default;
+}
+
+.logout-button {
+  width: 100%;
+  background: #fff;
+  color: var(--danger-color);
+  border: 1px solid #fee2e2;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.logout-button:hover {
+  background: #fef2f2;
+  border-color: var(--danger-color);
+}
+
+.logout-button-collapsed {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-button-collapsed svg {
+  width: 18px;
+  height: 18px;
+}

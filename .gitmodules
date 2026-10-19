@@ -1,0 +1,15 @@
+[submodule "ai"]
+	path = ai
+	url = https://github.com/AIP491-G05-Capstone-Project/ai
+[submodule "be"]
+	path = be
+	url = https://github.com/AIP491-G05-Capstone-Project/be
+[submodule "docs"]
+	path = docs
+	url = https://github.com/AIP491-G05-Capstone-Project/docs
+[submodule "experiment"]
+	path = experiment
+	url = https://github.com/AIP491-G05-Capstone-Project/experiment
+[submodule "fe"]
+	path = fe
+	url = https://github.com/AIP491-G05-Capstone-Project/fe

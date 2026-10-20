@@ -72,7 +72,12 @@ def _get_backbone(backbone_id: str, device):
     if cached is not None:
         return cached
     tokenizer = AutoTokenizer.from_pretrained(backbone_id)
-    backbone = AutoModel.from_pretrained(backbone_id).to(device).eval()
+    if device.type == "cpu":
+        backbone = AutoModel.from_pretrained(backbone_id, torch_dtype=torch.float16, low_cpu_mem_usage=True,)
+    else:
+        backbone = AutoModel.from_pretrained(backbone_id)
+
+    backbone = backbone.to(device).eval()
     for p in backbone.parameters():
         p.requires_grad = False
     _backbone_cache[backbone_id] = (backbone, tokenizer)

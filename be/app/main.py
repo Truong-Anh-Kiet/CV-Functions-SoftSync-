@@ -33,12 +33,17 @@ def create_app() -> FastAPI:
     )
     # ============================================================
 
-    # Tạo thư mục chứa file preview nếu chưa có
-    if not os.path.exists("static_uploads"):
-        os.makedirs("static_uploads")
+    # Thư mục lưu file upload
+    upload_dir = settings.upload_dir
 
-    # Cấu hình để xem file tĩnh
-    app.mount("/static", StaticFiles(directory="static_uploads"), name="static")
+    # Vercel chỉ cho phép ghi tạm vào /tmp
+    if os.getenv("VERCEL") and not os.path.isabs(upload_dir):
+        upload_dir = os.path.join("/tmp", upload_dir)
+
+    os.makedirs(upload_dir, exist_ok=True)
+
+    # Phục vụ file tĩnh
+    app.mount( "/static", StaticFiles(directory=upload_dir), name="static",)
 
     # Đăng ký router
     app.include_router(auth_router, prefix="/api/auth", tags=["auth"])

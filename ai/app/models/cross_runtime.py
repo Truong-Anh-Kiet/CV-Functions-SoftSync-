@@ -14,6 +14,11 @@ where <state_dict> has flat keys scorer.* / fusion.*. `task_w` is training-only
 and discarded. Legacy formats are also accepted for forward-compat.
 """
 
+from types import SimpleNamespace
+
+import numpy as np
+import onnxruntime as ort
+
 import logging
 import threading
 
@@ -66,23 +71,151 @@ def _load_checkpoint(path, device):
     return _extract_state_dict(raw)
 
 
+
+class _OnnxBackbone:
+    """Adapter để ONNX trả đầu ra tương thích với backbone PyTorch."""
+
+    def __init__(self, model_path, device):
+        self.device = torch.device(device)
+
+        if self.device.type != "cpu":
+            raise RuntimeError("ONNX backbone hiện chỉ hỗ trợ CPU.")
+
+        options = ort.SessionOptions()
+        options.intra_op_num_threads = max(
+            1, settings.torch_num_threads or 1
+        )
+        options.inter_op_num_threads = 1
+        options.enable_cpu_mem_arena = False
+        options.enable_mem_pattern = False
+        options.graph_optimization_level = (
+            ort.GraphOptimizationLevel.ORT_ENABLE_ALL
+        )
+
+        self.session = ort.InferenceSession(
+            str(model_path),
+            sess_options=options,
+            providers=["CPUExecutionProvider"],
+        )
+        self.input_names = {
+            item.name for item in self.session.get_inputs()
+        }
+
+    def to(self, device):
+        self.device = torch.device(device)
+        if self.device.type != "cpu":
+            raise RuntimeError("ONNX backbone chỉ hỗ trợ CPU.")
+        return self
+
+    def eval(self):
+        return self
+
+    def parameters(self):
+        # ONNX không có tham số PyTorch để đóng băng.
+        return iter(())
+
+    def __call__(self, **inputs):
+        feeds = {}
+
+        for name, value in inputs.items():
+            if name not in self.input_names:
+                continue
+
+            if torch.is_tensor(value):
+                value = value.detach().cpu().numpy()
+
+            feeds[name] = np.asarray(value, dtype=np.int64)
+
+        if "input_ids" not in feeds:
+            raise ValueError("Thiếu input_ids cho ONNX backbone.")
+
+        if "attention_mask" in self.input_names:
+            feeds.setdefault(
+                "attention_mask",
+                np.ones_like(feeds["input_ids"]),
+            )
+
+        if "token_type_ids" in self.input_names:
+            feeds.setdefault(
+                "token_type_ids",
+                np.zeros_like(feeds["input_ids"]),
+            )
+
+        missing = self.input_names - feeds.keys()
+        if missing:
+            raise ValueError(
+                f"Thiếu đầu vào ONNX: {sorted(missing)}"
+            )
+
+        outputs = self.session.run(None, feeds)
+        hidden_state = torch.from_numpy(outputs[0]).to(self.device)
+
+        return SimpleNamespace(last_hidden_state=hidden_state)
+
+
+
 def _get_backbone(backbone_id: str, device):
-    """Load (once) and return the shared (backbone, tokenizer) for a backbone_id."""
+    """Load once and return the shared backbone and tokenizer."""
     cached = _backbone_cache.get(backbone_id)
     if cached is not None:
         return cached
-    tokenizer = AutoTokenizer.from_pretrained(backbone_id)
-    if device.type == "cpu":
-        backbone = AutoModel.from_pretrained(backbone_id, torch_dtype=torch.float16, low_cpu_mem_usage=True,)
+
+    if settings.inference_backend.strip().lower() == "onnx":
+        if device.type != "cpu":
+            raise RuntimeError("INFERENCE_BACKEND=onnx yêu cầu CPU.")
+
+        model_path = (
+            settings.models_dir
+            / "mbert_onnx_int8"
+            / "model_int8.onnx"
+        )
+        tokenizer_path = settings.models_dir / "mbert_tokenizer"
+
+        if not model_path.is_file():
+            raise FileNotFoundError(
+                f"Không tìm thấy ONNX model: {model_path}"
+            )
+
+        if not tokenizer_path.is_dir():
+            raise FileNotFoundError(
+                f"Không tìm thấy tokenizer: {tokenizer_path}"
+            )
+
+        tokenizer = AutoTokenizer.from_pretrained(
+            str(tokenizer_path),
+            local_files_only=True,
+        )
+        backbone = _OnnxBackbone(model_path, device)
+
+        logger.info("Loaded ONNX INT8 backbone on CPU")
     else:
-        backbone = AutoModel.from_pretrained(backbone_id)
+        tokenizer = AutoTokenizer.from_pretrained(backbone_id)
+
+        if device.type == "cpu":
+            backbone = AutoModel.from_pretrained(
+                backbone_id,
+                torch_dtype=torch.float16,
+                low_cpu_mem_usage=True,
+            )
+        else:
+            backbone = AutoModel.from_pretrained(backbone_id)
+
+        backbone = backbone.to(device).eval()
+
+        for parameter in backbone.parameters():
+            parameter.requires_grad = False
+
+        logger.info(
+            "Loaded shared PyTorch backbone %r on %s",
+            backbone_id,
+            device,
+        )
 
     backbone = backbone.to(device).eval()
-    for p in backbone.parameters():
-        p.requires_grad = False
     _backbone_cache[backbone_id] = (backbone, tokenizer)
-    logger.info("Loaded shared backbone %r on %s", backbone_id, device)
+
     return backbone, tokenizer
+
 
 
 def _has_weights(entry) -> bool:

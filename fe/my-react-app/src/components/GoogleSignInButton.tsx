@@ -30,6 +30,7 @@ export default function GoogleSignInButton({
         buttonRef.current.innerHTML = '';
         window.google.accounts.id.initialize({
           client_id: clientId,
+          use_fedcm_for_button: true,
           callback: async (response) => {
             if (!response.credential) {
               onError('Google did not return an id_token');

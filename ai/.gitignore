@@ -9,4 +9,3 @@ env/
 .ruff_cache/
 tmp/
 checkpoints/*.pt
-.python-version

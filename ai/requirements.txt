@@ -1,3 +1,4 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
 fastapi==0.128.8
 uvicorn[standard]
 pydantic-settings
@@ -5,7 +6,7 @@ python-dotenv
 python-multipart
 PyMuPDF
 openai
-torch>=2.1,<2.4
+torch==2.3.1+cpu
 numpy<2
 transformers==4.44.2
 sentence-transformers==3.0.1

@@ -85,8 +85,8 @@ export default function Sidebar({
       </button>
 
       <div className="sidebar-brand">
-        <div className="logo-icon">JD</div>
-        {!collapsed && <h2>Recruitment</h2>}
+        <img className="logo-icon" src="/softsync-logo.jpg" alt="SoftSync Space" />
+        {!collapsed && <h2>SoftSync Space</h2>}
       </div>
 
       <nav className="sidebar-nav">

@@ -62,16 +62,11 @@
 }
 
 .logo-icon {
-  background: var(--primary-color);
-  color: white;
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 16px;
+  display: block;
+  object-fit: cover;
   flex-shrink: 0;
 }
 

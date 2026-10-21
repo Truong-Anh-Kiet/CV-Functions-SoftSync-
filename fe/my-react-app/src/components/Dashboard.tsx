@@ -385,9 +385,7 @@ export default function Dashboard() {
 
           {activeMenu === 'CV Ranking' && (
             <CvRankingSection
-              modelOptions={modelOptions}
               selectedModel={selectedModel}
-              setSelectedModel={setSelectedModel}
               showNotify={showNotify}
             />
           )}

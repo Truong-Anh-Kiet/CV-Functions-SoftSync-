@@ -1,5 +1,3 @@
-import type { ModelOption } from '../../../types/model';
-
 interface JdQueryPanelProps {
   mode: 'text' | 'file';
   setMode: (mode: 'text' | 'file') => void;
@@ -20,9 +18,6 @@ interface JdQueryPanelProps {
   reindexLoading: boolean;
   currentSearchMeta: string | null;
   currentReindexSummary: string | null;
-  modelOptions: ModelOption[];
-  selectedModel: string;
-  setSelectedModel: (value: string) => void;
   onJdFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSearch: () => void;
   onReindex: () => void;
@@ -45,8 +40,6 @@ export function JdQueryPanel(props: JdQueryPanelProps) {
     reindexLoading,
     currentSearchMeta,
     currentReindexSummary,
-    modelOptions,
-    selectedModel, setSelectedModel,
     onJdFileChange,
     onSearch,
     onReindex,
@@ -109,23 +102,6 @@ export function JdQueryPanel(props: JdQueryPanelProps) {
           )}
 
           <div className="search-controls-row">
-            <label className="search-field">
-              <span>Model</span>
-              <select
-                className="search-select"
-                value={selectedModel}
-                onChange={(event) => setSelectedModel(event.target.value)}
-                disabled={loading || reindexLoading || modelOptions.length === 0}
-              >
-                {modelOptions.length === 0 ? (
-                  <option value="">Default model</option>
-                ) : (
-                  modelOptions.map(option => (
-                    <option key={option.id} value={option.id}>{option.display_name}</option>
-                  ))
-                )}
-              </select>
-            </label>
             <label className="search-field">
               <span>Top K</span>
               <input

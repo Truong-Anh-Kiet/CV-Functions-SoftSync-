@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import type { ModelOption } from '../../../types/model';
 import type { RankingResultItem } from '../../../types/ranking';
 import { useCvRanking } from '../../../hooks/useCvRanking';
 import JdInputPanel from '../ranking/JdInputPanel';
@@ -10,9 +9,7 @@ import RankingProgressBar from '../ranking/RankingProgressBar';
 import RankingDetailModal from '../modals/RankingDetailModal';
 
 interface CvRankingSectionProps {
-  modelOptions: ModelOption[];
   selectedModel: string;
-  setSelectedModel: (value: string) => void;
   showNotify: (msg: string) => void;
 }
 
@@ -43,9 +40,7 @@ const buildCsv = (results: RankingResultItem[]) => {
 };
 
 export default function CvRankingSection({
-  modelOptions,
   selectedModel,
-  setSelectedModel,
   showNotify,
 }: CvRankingSectionProps) {
   const ranking = useCvRanking();
@@ -78,9 +73,6 @@ export default function CvRankingSection({
     <div className="ranking-workspace">
       <RankingSummaryPanel
         totalCvCount={ranking.totalCvCount}
-        modelOptions={modelOptions}
-        selectedModel={selectedModel}
-        setSelectedModel={setSelectedModel}
         jdSummary={jdSummary}
         loading={ranking.loading}
         meta={ranking.meta}

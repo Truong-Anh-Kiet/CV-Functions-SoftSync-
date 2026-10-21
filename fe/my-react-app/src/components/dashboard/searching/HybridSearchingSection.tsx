@@ -554,9 +554,6 @@ export default function HybridSearchingSection(props: HybridSearchingSectionProp
               reindexLoading={reindexLoading}
               currentSearchMeta={currentSearchMeta ? `${currentSearchMeta.returned}/${currentSearchMeta.total_cvs} CV phù hợp` : null}
               currentReindexSummary={currentReindexSummary ? `${currentReindexSummary.successful}/${currentReindexSummary.total_cvs} CV đã index` : null}
-              modelOptions={modelOptions}
-              selectedModel={selectedModel}
-              setSelectedModel={setSelectedModel}
               onJdFileChange={onSearchJdFileChange}
               onSearch={handleRunHybridSearch}
               onReindex={onReindexAllCvs}

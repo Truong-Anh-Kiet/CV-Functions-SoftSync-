@@ -61,9 +61,6 @@ export default function CvSearchingSection(props: CvSearchingSectionProps) {
           reindexLoading={props.reindexLoading}
           currentSearchMeta={props.currentSearchMeta ? `${props.currentSearchMeta.returned}/${props.currentSearchMeta.total_cvs} CV phù hợp` : null}
           currentReindexSummary={props.currentReindexSummary ? `${props.currentReindexSummary.successful}/${props.currentReindexSummary.total_cvs} CV đã index` : null}
-          modelOptions={props.modelOptions}
-          selectedModel={props.selectedModel}
-          setSelectedModel={props.setSelectedModel}
           onJdFileChange={props.onSearchJdFileChange}
           onSearch={props.onRunCvSearch}
           onReindex={props.onReindexAllCvs}

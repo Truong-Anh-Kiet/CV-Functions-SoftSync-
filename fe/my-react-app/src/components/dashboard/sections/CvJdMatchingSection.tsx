@@ -1,5 +1,6 @@
 import type { UploadedFile } from '../../../types/dashboard';
 import type { MatchingResult } from '../../../types/matching';
+import type { ModelOption } from '../../../types/model';
 import type { MatchingMeta } from '../../../hooks/useMatching';
 import FullDocumentPanel from '../matching/FullDocumentPanel';
 import HeatmapSection from '../matching/HeatmapSection';
@@ -22,6 +23,9 @@ interface CvJdMatchingSectionProps {
   onRunMatching: () => void;
   onOpenCrossView: (result: MatchingResult) => void;
   onOpenStructured: () => void;
+  modelOptions: ModelOption[];
+  selectedModel: string;
+  setSelectedModel: (model: string) => void;
   selectedHeatmapCell?: { rowIndex: number; colIndex: number } | null;
   onHeatmapCellClick?: (rowIndex: number, colIndex: number, score: number, result: MatchingResult) => void;
 }
@@ -43,6 +47,9 @@ export default function CvJdMatchingSection({
   onRunMatching,
   onOpenCrossView,
   onOpenStructured,
+  modelOptions,
+  selectedModel,
+  setSelectedModel,
   selectedHeatmapCell,
   onHeatmapCellClick,
 }: CvJdMatchingSectionProps) {

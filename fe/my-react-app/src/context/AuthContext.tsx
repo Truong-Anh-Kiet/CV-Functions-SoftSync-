@@ -42,6 +42,18 @@ interface TokenResponse {
   refresh_token: string;
 }
 
+class ApiError extends Error {
+  readonly status: number;
+
+  constructor(
+    message: string,
+    status: number,
+  ) {
+    super(message);
+    this.status = status;
+  }
+}
+
 interface GoogleClientConfigResponse {
   client_id: string;
 }
@@ -140,7 +152,7 @@ async function postJson<TResponse>(
   });
 
   if (!response.ok) {
-    throw new Error(await parseApiError(response));
+    throw new ApiError(await parseApiError(response), response.status);
   }
 
   return response.json() as Promise<TResponse>;
@@ -155,7 +167,7 @@ async function getJson<TResponse>(path: string, accessToken?: string | null): Pr
   });
 
   if (!response.ok) {
-    throw new Error(await parseApiError(response));
+    throw new ApiError(await parseApiError(response), response.status);
   }
 
   return response.json() as Promise<TResponse>;
@@ -205,6 +217,12 @@ async function getCurrentUser(accessToken: string): Promise<AuthUser> {
   };
 }
 
+async function refreshTokens(refreshToken: string): Promise<TokenResponse> {
+  return postJson<TokenResponse>('/api/auth/refresh', {
+    refresh_token: refreshToken,
+  });
+}
+
 export function loadGoogleIdentityScript(): Promise<void> {
   if (window.google?.accounts?.id) return Promise.resolve();
 
@@ -231,30 +249,52 @@ export function loadGoogleIdentityScript(): Promise<void> {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [auth, setAuth] = useState<StoredAuth | null>(() => readStoredAuth());
+  const accessToken = auth?.accessToken;
+  const refreshToken = auth?.refreshToken;
 
   useEffect(() => {
-    const accessToken = auth?.accessToken;
-    if (!accessToken) return;
+    if (!accessToken || !refreshToken) return;
+    const currentAuth = { accessToken, refreshToken };
 
     let active = true;
-    void getCurrentUser(accessToken)
-      .then((user) => {
+    const restoreSession = async () => {
+      try {
+        const user = await getCurrentUser(currentAuth.accessToken);
         if (!active) return;
-        setAuth((currentAuth) => {
-          if (!currentAuth) return null;
-          const refreshedAuth = { ...currentAuth, user };
+        setAuth((storedAuth) => {
+          if (!storedAuth) return null;
+          const refreshedAuth = { ...storedAuth, user };
           localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(refreshedAuth));
           return refreshedAuth;
         });
-      })
-      .catch(() => {
-        // Keep the existing session display if the profile API is temporarily unavailable.
-      });
+      } catch (error) {
+        if (!(error instanceof ApiError) || error.status !== 401) return;
+
+        try {
+          const tokens = await refreshTokens(currentAuth.refreshToken);
+          const user = await getCurrentUser(tokens.access_token);
+          if (!active) return;
+          const refreshedAuth: StoredAuth = {
+            accessToken: tokens.access_token,
+            refreshToken: tokens.refresh_token,
+            user,
+          };
+          localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(refreshedAuth));
+          setAuth(refreshedAuth);
+        } catch {
+          if (!active) return;
+          localStorage.removeItem(AUTH_STORAGE_KEY);
+          setAuth(null);
+        }
+      }
+    };
+
+    void restoreSession();
 
     return () => {
       active = false;
     };
-  }, [auth?.accessToken]);
+  }, [accessToken, refreshToken]);
 
   const saveAuth = (tokens: TokenResponse, user: AuthUser) => {
     const nextAuth: StoredAuth = {

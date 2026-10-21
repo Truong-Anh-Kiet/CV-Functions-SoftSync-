@@ -373,9 +373,6 @@ export default function Dashboard() {
               jdText={jdText}
               setJdText={setJdText}
               matchingMeta={matchingMeta}
-              modelOptions={modelOptions}
-              selectedModel={selectedModel}
-              setSelectedModel={setSelectedModel}
               onPreviewUpload={handlePreviewUpload}
               onRemove={removeFile}
               onRunMatching={handleRunMatching}

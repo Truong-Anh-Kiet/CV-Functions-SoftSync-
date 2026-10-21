@@ -31,6 +31,7 @@ from app.schemas.auth import (
     MessageResponse,
     RegisterRequest,
     RegisterResponse,
+    RefreshTokenRequest,
     ResetPasswordRequest,
     TokenResponse,
     VerifyEmailRequest,
@@ -272,6 +273,28 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)) -> TokenResponse
         )
 
     return create_token_pair(user)
+
+
+@router.post("/refresh", response_model=TokenResponse)
+def refresh_token(payload: RefreshTokenRequest, db: Session = Depends(get_db)) -> TokenResponse:
+    refresh_payload = parse_token(payload.refresh_token, expected_type="refresh")
+    if is_token_blacklisted(db, refresh_payload["jti"]):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has been revoked")
+
+    try:
+        user_id = int(refresh_payload["sub"])
+    except (KeyError, TypeError, ValueError) as exc:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token subject") from exc
+
+    user = db.get(User, user_id)
+    if not user or not user.is_active:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found or inactive")
+
+    # Rotate the refresh token so a token that has already been used cannot be reused.
+    add_token_to_blacklist(db, refresh_payload)
+    tokens = create_token_pair(user)
+    db.commit()
+    return tokens
 
 
 @router.get("/me", response_model=CurrentUserResponse)

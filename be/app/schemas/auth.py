@@ -80,6 +80,10 @@ class TokenResponse(BaseModel):
     refresh_token: str
 
 
+class RefreshTokenRequest(BaseModel):
+    refresh_token: str = Field(min_length=1)
+
+
 class CurrentUserResponse(BaseModel):
     id: int
     username: str

@@ -75,6 +75,53 @@ def test_register_login_logout_flow() -> None:
         cleanup_user(email)
 
 
+def test_refresh_rotates_refresh_token_and_returns_new_access_token() -> None:
+    email = f"refresh-{uuid4().hex}@example.com"
+    username = f"refresh-{uuid4().hex[:12]}"
+
+    try:
+        register_response = client.post(
+            "/api/auth/register",
+            json={
+                "username": username,
+                "email": email,
+                "password": "Password123!",
+                "full_name": "Refresh Test",
+            },
+        )
+        assert register_response.status_code == 201
+
+        login_response = client.post(
+            "/api/auth/login",
+            json={"username": username, "password": "Password123!"},
+        )
+        assert login_response.status_code == 200
+        tokens = login_response.json()
+
+        refresh_response = client.post(
+            "/api/auth/refresh",
+            json={"refresh_token": tokens["refresh_token"]},
+        )
+        assert refresh_response.status_code == 200
+        refreshed_tokens = refresh_response.json()
+        assert set(refreshed_tokens) == {"access_token", "refresh_token"}
+        assert refreshed_tokens["refresh_token"] != tokens["refresh_token"]
+
+        current_user_response = client.get(
+            "/api/auth/me",
+            headers={"Authorization": f"Bearer {refreshed_tokens['access_token']}"},
+        )
+        assert current_user_response.status_code == 200
+
+        reused_refresh_response = client.post(
+            "/api/auth/refresh",
+            json={"refresh_token": tokens["refresh_token"]},
+        )
+        assert reused_refresh_response.status_code == 401
+    finally:
+        cleanup_user(email)
+
+
 def test_register_rejects_weak_password() -> None:
     response = client.post(
         "/api/auth/register",

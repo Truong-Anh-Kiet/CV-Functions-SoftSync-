@@ -1,7 +1,6 @@
 import type { UploadedFile } from '../../../types/dashboard';
 import type { MatchingResult } from '../../../types/matching';
 import type { MatchingMeta } from '../../../hooks/useMatching';
-import type { ModelOption } from '../../../types/model';
 import FullDocumentPanel from '../matching/FullDocumentPanel';
 import HeatmapSection from '../matching/HeatmapSection';
 import XaiExplanation from '../matching/XaiExplanation';
@@ -18,9 +17,6 @@ interface CvJdMatchingSectionProps {
   jdText: string;
   setJdText: (value: string) => void;
   matchingMeta: MatchingMeta | null;
-  modelOptions: ModelOption[];
-  selectedModel: string;
-  setSelectedModel: (value: string) => void;
   onPreviewUpload: (e: React.ChangeEvent<HTMLInputElement>, category: 'CV' | 'JD') => void;
   onRemove: (id: string) => void;
   onRunMatching: () => void;
@@ -42,9 +38,6 @@ export default function CvJdMatchingSection({
   jdText,
   setJdText,
   matchingMeta,
-  modelOptions,
-  selectedModel,
-  setSelectedModel,
   onPreviewUpload,
   onRemove,
   onRunMatching,

@@ -59,7 +59,6 @@ interface HybridSearchingSectionProps {
   savedCvsLength: number;
   modelOptions: ModelOption[];
   selectedModel: string;
-  setSelectedModel: (value: string) => void;
   onSearchJdFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onRunCvSearch: () => void;
   onReindexAllCvs: () => void;
@@ -140,7 +139,6 @@ export default function HybridSearchingSection(props: HybridSearchingSectionProp
     savedCvsLength,
     modelOptions,
     selectedModel,
-    setSelectedModel,
     onSearchJdFileChange,
     onRunCvSearch,
     onReindexAllCvs,

@@ -63,7 +63,7 @@ export default function Dashboard() {
     deleteTargetCv,
     setDeleteTargetCv,
   } = useSavedCvs(showNotify);
-  const { modelOptions, selectedModel, setSelectedModel } = useModels();
+  const { modelOptions, selectedModel } = useModels();
   const {
     searchMode, setSearchMode,
     searchJdText, setSearchJdText,
@@ -424,7 +424,6 @@ export default function Dashboard() {
               savedCvsLength={savedCvs.length}
               modelOptions={modelOptions}
               selectedModel={selectedModel}
-              setSelectedModel={setSelectedModel}
               onSearchJdFileChange={handleSearchJdFileChange}
               onRunCvSearch={handleRunCvSearch}
               onReindexAllCvs={handleReindexAllCvs}

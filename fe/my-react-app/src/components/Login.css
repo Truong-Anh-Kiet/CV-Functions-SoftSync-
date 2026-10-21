@@ -15,7 +15,7 @@ body {
   justify-content: center; /* Căn giữa ngang */
   align-items: center;     /* Căn giữa dọc */
   /* Chuyển màu nền xanh của phần bên trái cũ ra toàn màn hình */
-  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 50%, #0e7490 100%);
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
   padding: 16px;
   overflow-y: auto;
 }
@@ -105,7 +105,7 @@ body {
 }
 
 .input-wrapper input:focus {
-  border-color: #06b6d4;
+  border-color: #8b5cf6;
   box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.15);
 }
 
@@ -117,7 +117,7 @@ body {
 
 .input-wrapper input:focus + svg,
 .input-wrapper:has(input:focus) svg {
-  fill: #06b6d4;
+  fill: #8b5cf6;
 }
 
 .error-message {
@@ -151,7 +151,7 @@ body {
 .text-button {
   border: 0;
   background: transparent;
-  color: #0891b2;
+  color: #7c3aed;
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
@@ -186,12 +186,12 @@ body {
 .remember-me input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #06b6d4;
+  accent-color: #8b5cf6;
   cursor: pointer;
 }
 
 .forgot-password {
-  color: #06b6d4;
+  color: #8b5cf6;
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
@@ -199,12 +199,12 @@ body {
 }
 
 .forgot-password:hover {
-  color: #0891b2;
+  color: #7c3aed;
   text-decoration: underline;
 }
 
 .submit-button {
-  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
   color: white;
   border: none;
   padding: 16px;
@@ -329,14 +329,14 @@ body {
 }
 
 .auth-footer a {
-  color: #06b6d4;
+  color: #8b5cf6;
   font-weight: 600;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .auth-footer a:hover {
-  color: #0891b2;
+  color: #7c3aed;
   text-decoration: underline;
 }
 

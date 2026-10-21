@@ -839,7 +839,7 @@ function WebProfileModal({
           width: 36px;
           height: 36px;
           border: 3px solid #e2e8f0;
-          border-top-color: #0891b2;
+          border-top-color: #7c3aed;
           border-radius: 50%;
           animation: spin 0.8s linear infinite;
         }
@@ -897,9 +897,9 @@ function WebProfileModal({
           background: #f1f5f9;
         }
         .ranking-detail-tabs button.active {
-          background: #0891b2;
+          background: #7c3aed;
           color: white;
-          border-color: #0891b2;
+          border-color: #7c3aed;
         }
         .tab-badge {
           font-size: 9px;

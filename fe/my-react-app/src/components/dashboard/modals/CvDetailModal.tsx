@@ -224,7 +224,7 @@ export default function CvDetailModal({ result, profile, searchMeta, onClose }: 
     : '';
 
   const sourceName = isAcademic ? 'Google Scholar' : isVW ? 'VietnamWorks' : profile ? 'CareerViet' : 'CV Database';
-  const sourceColor = isAcademic ? '#15803d' : isVW ? '#6d28d9' : '#1d4ed8';
+  const sourceColor = isAcademic ? '#15803d' : isVW ? '#6d28d9' : '#6d28d9';
   const displayName = name || result.filename.replace(/\.pdf$/i, '');
   const initials = displayName.split(' ').slice(0, 2).map(w => w[0]?.toUpperCase() || '').join('');
 
@@ -357,8 +357,8 @@ export default function CvDetailModal({ result, profile, searchMeta, onClose }: 
                 onClick={() => !disabled && setActiveTab(tab.id)}
                 style={{
                   padding: '10px 16px', background: 'none', border: 'none',
-                  borderBottom: activeTab === tab.id ? '2px solid #06b6d4' : '2px solid transparent',
-                  color: activeTab === tab.id ? '#0891b2' : disabled ? '#cbd5e1' : '#64748b',
+                  borderBottom: activeTab === tab.id ? '2px solid #8b5cf6' : '2px solid transparent',
+                  color: activeTab === tab.id ? '#7c3aed' : disabled ? '#cbd5e1' : '#64748b',
                   fontSize: 13, fontWeight: activeTab === tab.id ? 700 : 500,
                   cursor: disabled ? 'not-allowed' : 'pointer',
                   transition: 'all 0.15s ease', marginBottom: -2,
@@ -368,7 +368,7 @@ export default function CvDetailModal({ result, profile, searchMeta, onClose }: 
                 {tab.id === 'xai' && rerankItem?.view_matches && (
                   <span style={{
                     marginLeft: 6, padding: '1px 6px', borderRadius: 999,
-                    background: '#ecfeff', color: '#0891b2',
+                    background: '#f5f3ff', color: '#7c3aed',
                     fontSize: 10, fontWeight: 700,
                   }}>
                     {rerankItem.view_matches.length}
@@ -416,7 +416,7 @@ export default function CvDetailModal({ result, profile, searchMeta, onClose }: 
                   <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px', color: '#94a3b8', marginBottom: 8 }}>Nội dung CV</div>
                   {cvTextLoading ? (
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, gap: 10, color: '#94a3b8', fontSize: 13 }}>
-                      <div style={{ width: 16, height: 16, border: '2px solid #e2e8f0', borderTopColor: '#0891b2', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
+                      <div style={{ width: 16, height: 16, border: '2px solid #e2e8f0', borderTopColor: '#7c3aed', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
                       Đang tải nội dung CV...
                     </div>
                   ) : cvText ? (
@@ -579,7 +579,7 @@ export default function CvDetailModal({ result, profile, searchMeta, onClose }: 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
                   {rerankItem?.cv_structured ? (
                     <div>
-                      <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.4px', color: '#0891b2', marginBottom: 10 }}>
+                      <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.4px', color: '#7c3aed', marginBottom: 10 }}>
                         CV Structured
                       </div>
                       <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, padding: 14, overflow: 'auto', maxHeight: 400 }}>
@@ -648,7 +648,7 @@ export default function CvDetailModal({ result, profile, searchMeta, onClose }: 
           {applyUrl && (
             <a href={applyUrl} target="_blank" rel="noopener noreferrer"
               style={{
-                padding: '9px 20px', background: 'linear-gradient(135deg, #0891b2, #06b6d4)',
+                padding: '9px 20px', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)',
                 border: 'none', borderRadius: 10, fontSize: 13, fontWeight: 700, color: 'white',
                 textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6,
                 boxShadow: '0 2px 8px rgba(6,182,212,0.3)',
@@ -714,20 +714,20 @@ function XaiTab({ matches, reason, cvCoverage, jdCoverage }: XaiTabProps) {
     <div>
       {/* Summary */}
       {(reason || cvCoverage || jdCoverage) && (
-        <div style={{ padding: '12px 16px', background: '#f0fdfa', border: '1px solid #ccfbf1', borderRadius: 10, marginBottom: 20 }}>
+        <div style={{ padding: '12px 16px', background: '#f5f3ff', border: '1px solid #ddd6fe', borderRadius: 10, marginBottom: 20 }}>
           {reason && (
             <>
-              <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.4px', color: '#0891b2', marginBottom: 6 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.4px', color: '#7c3aed', marginBottom: 6 }}>
                 Tổng kết AI
               </div>
-              <p style={{ fontSize: 13, color: '#134e4a', lineHeight: 1.6, margin: '0 0 8px' }}>{reason}</p>
+              <p style={{ fontSize: 13, color: '#4c1d95', lineHeight: 1.6, margin: '0 0 8px' }}>{reason}</p>
             </>
           )}
           {cvCoverage && (
-            <p style={{ fontSize: 12, color: '#0e7490', lineHeight: 1.6, margin: 0 }}>{cvCoverage}</p>
+            <p style={{ fontSize: 12, color: '#6d28d9', lineHeight: 1.6, margin: 0 }}>{cvCoverage}</p>
           )}
           {jdCoverage && !cvCoverage && (
-            <p style={{ fontSize: 12, color: '#0e7490', lineHeight: 1.6, margin: 0 }}>{jdCoverage}</p>
+            <p style={{ fontSize: 12, color: '#6d28d9', lineHeight: 1.6, margin: 0 }}>{jdCoverage}</p>
           )}
         </div>
       )}
@@ -795,7 +795,7 @@ function XaiTab({ matches, reason, cvCoverage, jdCoverage }: XaiTabProps) {
                   verticalAlign: 'middle',
                 }}>
                   <div style={{
-                    fontSize: 11, fontWeight: 700, color: '#0891b2',
+                    fontSize: 11, fontWeight: 700, color: '#7c3aed',
                     lineHeight: 1.3, maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                   }} title={cvl}>
                     {cvl}
@@ -834,7 +834,7 @@ function XaiTab({ matches, reason, cvCoverage, jdCoverage }: XaiTabProps) {
 
                       {/* CV content */}
                       <div style={{ marginBottom: 6 }}>
-                        <div style={{ fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.3px', color: '#0891b2', marginBottom: 4 }}>CV</div>
+                        <div style={{ fontSize: 9, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.3px', color: '#7c3aed', marginBottom: 4 }}>CV</div>
                         <div style={{ fontSize: 12, fontWeight: 600, color: '#0f172a', lineHeight: 1.4, wordBreak: 'break-word' }}>
                           {match.cv_view || '—'}
                         </div>
@@ -893,12 +893,12 @@ const SECTION_ORDER = [
 
 const SECTION_COLORS: Record<string, string> = {
   personal_info: '#6366f1',
-  experience: '#0891b2', work_experience: '#0891b2',
+  experience: '#7c3aed', work_experience: '#7c3aed',
   education: '#7c3aed',
   skills: '#16a34a',
   certifications: '#d97706',
   projects: '#db2777',
-  languages: '#0284c7',
+  languages: '#8b5cf6',
   achievements: '#ea580c',
   publications: '#7c3aed',
   summary: '#475569', objective: '#475569',
@@ -1021,7 +1021,7 @@ function renderSectionContent(content: unknown, color: string): React.ReactNode 
 
 function CvStructuredSection({ label, content }: { label: string; content: unknown }) {
   const key = SECTION_ORDER.find(o => label.toLowerCase().includes(o)) || '';
-  const color = SECTION_COLORS[key] || '#0891b2';
+  const color = SECTION_COLORS[key] || '#7c3aed';
   const icon = SECTION_ICONS[key];
   const displayLabel = label.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
@@ -1130,20 +1130,20 @@ function extractDbFields(structured: Record<string, unknown>): ExtractedField[] 
     if (personal.full_name) fields.push({ label: 'Họ tên', value: String(personal.full_name), color: '#6366f1' });
     if (personal.email) fields.push({ label: 'Email', value: String(personal.email), color: '#475569' });
     if (personal.phone) fields.push({ label: 'Điện thoại', value: String(personal.phone), color: '#475569' });
-    if (personal.location) fields.push({ label: 'Nơi ở', value: String(personal.location), color: '#0284c7' });
-    if (personal.address) fields.push({ label: 'Địa chỉ', value: String(personal.address), color: '#0284c7' });
+    if (personal.location) fields.push({ label: 'Nơi ở', value: String(personal.location), color: '#8b5cf6' });
+    if (personal.address) fields.push({ label: 'Địa chỉ', value: String(personal.address), color: '#8b5cf6' });
   }
 
   // 2) Top-level fields often returned by LLM structurers
   if (structured.name && !personal) fields.push({ label: 'Họ tên', value: String(structured.name), color: '#6366f1' });
   if (structured.full_name && !personal) fields.push({ label: 'Họ tên', value: String(structured.full_name), color: '#6366f1' });
-  if (structured.position) fields.push({ label: 'Vị trí', value: String(structured.position), color: '#0891b2' });
-  if (structured.job_title) fields.push({ label: 'Vị trí', value: String(structured.job_title), color: '#0891b2' });
-  if (structured.title) fields.push({ label: 'Vị trí', value: String(structured.title), color: '#0891b2' });
+  if (structured.position) fields.push({ label: 'Vị trí', value: String(structured.position), color: '#7c3aed' });
+  if (structured.job_title) fields.push({ label: 'Vị trí', value: String(structured.job_title), color: '#7c3aed' });
+  if (structured.title) fields.push({ label: 'Vị trí', value: String(structured.title), color: '#7c3aed' });
   if (structured.education_level) fields.push({ label: 'Trình độ', value: String(structured.education_level), color: '#7c3aed' });
   if (structured.experience_years) fields.push({ label: 'Kinh nghiệm', value: String(structured.experience_years), color: '#d97706' });
   if (structured.salary_expectation) fields.push({ label: 'Lương mong muốn', value: String(structured.salary_expectation), color: '#16a34a' });
-  if (structured.location) fields.push({ label: 'Nơi ở', value: String(structured.location), color: '#0284c7' });
+  if (structured.location) fields.push({ label: 'Nơi ở', value: String(structured.location), color: '#8b5cf6' });
 
   // 3) Summary
   if (structured.summary) {
@@ -1155,7 +1155,7 @@ function extractDbFields(structured: Record<string, unknown>): ExtractedField[] 
   const experience = structured.experience;
   if (Array.isArray(experience) && experience.length > 0) {
     const first = experience[0] as Record<string, unknown>;
-    if (first.job_title) fields.push({ label: 'Vị trí', value: String(first.job_title), color: '#0891b2' });
+    if (first.job_title) fields.push({ label: 'Vị trí', value: String(first.job_title), color: '#7c3aed' });
     if (first.company) fields.push({ label: 'Công ty', value: String(first.company), color: '#db2777' });
     if (first.description) {
       const d = String(first.description);
@@ -1185,7 +1185,7 @@ function extractDbFields(structured: Record<string, unknown>): ExtractedField[] 
   // 7) Languages
   if (Array.isArray(structured.languages) && structured.languages.length > 0) {
     const langs = structured.languages as Record<string, unknown>[];
-    fields.push({ label: 'Ngôn ngữ', value: langs.map(l => l.language).filter(Boolean).join(', '), color: '#0284c7' });
+    fields.push({ label: 'Ngôn ngữ', value: langs.map(l => l.language).filter(Boolean).join(', '), color: '#8b5cf6' });
   }
 
   // 8) Skills
@@ -1201,7 +1201,7 @@ function extractDbFields(structured: Record<string, unknown>): ExtractedField[] 
 // Show all top-level key-value pairs as fallback cards
 function extractDbFieldsGeneric(structured: Record<string, unknown>): ExtractedField[] {
   const SKIP_KEYS = new Set(['experience', 'education', 'certifications', 'languages', 'skills', 'projects']);
-  const COLORS = ['#0891b2', '#6366f1', '#7c3aed', '#d97706', '#16a34a', '#0284c7', '#db2777', '#475569'];
+  const COLORS = ['#7c3aed', '#6366f1', '#7c3aed', '#d97706', '#16a34a', '#8b5cf6', '#db2777', '#475569'];
   const fields: ExtractedField[] = [];
 
   for (const [key, value] of Object.entries(structured)) {
@@ -1235,13 +1235,13 @@ function extractDbFieldsGeneric(structured: Record<string, unknown>): ExtractedF
 function extractWebFields(profile: Record<string, unknown>): ExtractedField[] {
   const fields: ExtractedField[] = [];
 
-  if (profile.title) fields.push({ label: 'Vị trí', value: String(profile.title), color: '#0891b2' });
+  if (profile.title) fields.push({ label: 'Vị trí', value: String(profile.title), color: '#7c3aed' });
   if (profile.candidate_name) fields.push({ label: 'Họ tên', value: String(profile.candidate_name), color: '#6366f1' });
   if (profile.education) fields.push({ label: 'Trình độ', value: String(profile.education), color: '#7c3aed' });
   if (profile.level) fields.push({ label: 'Cấp bậc', value: String(profile.level), color: '#7c3aed' });
   if (profile.experience) fields.push({ label: 'Kinh nghiệm', value: String(profile.experience), color: '#d97706' });
   if (profile.salary) fields.push({ label: 'Lương', value: String(profile.salary), color: '#16a34a' });
-  if (profile.location) fields.push({ label: 'Nơi ở', value: String(profile.location), color: '#0284c7' });
+  if (profile.location) fields.push({ label: 'Nơi ở', value: String(profile.location), color: '#8b5cf6' });
   if (profile.last_access) fields.push({ label: 'Cập nhật', value: String(profile.last_access), color: '#475569' });
 
   return fields;

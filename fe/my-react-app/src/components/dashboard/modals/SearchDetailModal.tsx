@@ -491,7 +491,7 @@ export default function SearchDetailModal({
           width: 36px;
           height: 36px;
           border: 3px solid #e2e8f0;
-          border-top-color: #0891b2;
+          border-top-color: #7c3aed;
           border-radius: 50%;
           animation: spin 0.8s linear infinite;
         }

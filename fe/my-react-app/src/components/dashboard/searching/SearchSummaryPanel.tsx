@@ -180,7 +180,7 @@ export default function SearchSummaryPanel({
         <div className="index-status success">
           <div className="index-status-header">
             <strong>{searchMeta.jd_analysis.job_title}</strong>
-            <span className="index-fail-badge" style={{ background: '#ecfeff', color: '#0e7490', borderColor: '#a5f3fc' }}>
+            <span className="index-fail-badge" style={{ background: '#f5f3ff', color: '#6d28d9', borderColor: '#ddd6fe' }}>
               {(Math.round((searchMeta.jd_analysis.confidence ?? 0) * 100))}%
             </span>
           </div>

@@ -13,45 +13,7 @@
   margin-bottom: 10px;
 }
 .toolbar-group { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.toolbar-left { flex: 1 1 auto; }
 .toolbar-right { gap: 14px; }
-
-.model-selector-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-gray);
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-.model-selector {
-  height: 40px;
-  padding: 0 14px;
-  border: 1.5px solid var(--primary-color);
-  background: white;
-  color: var(--text-dark);
-  border-radius: 10px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 280px;
-  text-transform: none;
-  letter-spacing: 0;
-}
-
-.model-selector:hover:not(:disabled) {
-  border-color: var(--primary-hover);
-  background: var(--primary-light);
-}
-
-.model-selector:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
 
 .heatmap-visual-container {
   background: white;

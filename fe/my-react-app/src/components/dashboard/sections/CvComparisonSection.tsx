@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import type { ModelOption } from '../../../types/model';
 import type { RankingResultItem } from '../../../types/ranking';
 import type { UploadedFile } from '../../../types/dashboard';
 import { useCvComparison } from '../../../hooks/useCvComparison';
@@ -7,9 +6,7 @@ import RankingDetailModal from '../modals/RankingDetailModal';
 import FileViewerModal from '../modals/FileViewerModal';
 
 interface CvComparisonSectionProps {
-  modelOptions: ModelOption[];
   selectedModel: string;
-  setSelectedModel: (value: string) => void;
   showNotify: (msg: string) => void;
 }
 
@@ -54,9 +51,7 @@ function DocCard({
 }
 
 export default function CvComparisonSection({
-  modelOptions,
   selectedModel,
-  setSelectedModel,
   showNotify,
 }: CvComparisonSectionProps) {
   const cmp = useCvComparison();
@@ -202,22 +197,6 @@ export default function CvComparisonSection({
     <div className="cmp-workspace">
       {/* Control bar */}
       <div className="cmp-controlbar">
-        <div className="cmp-controlbar-field">
-          <span>Model AI</span>
-          <select
-            className="cmp-controlbar-select"
-            value={selectedModel}
-            onChange={(e) => setSelectedModel(e.target.value)}
-            disabled={cmp.loading || modelOptions.length === 0}
-          >
-            {modelOptions.length === 0 ? (
-              <option value="">Đang tải model...</option>
-            ) : (
-              modelOptions.map((opt) => <option key={opt.id} value={opt.id}>{opt.display_name}</option>)
-            )}
-          </select>
-        </div>
-
         <span className={`cmp-count ${cmp.totalCvCount === 2 ? 'ok' : ''}`}>
           {cmp.totalCvCount === 2 ? 'Đã chọn đủ 2 CV' : `Cần chọn đủ 2 CV (hiện ${cmp.totalCvCount})`}
         </span>

@@ -378,9 +378,6 @@ export default function Dashboard() {
               onRunMatching={handleRunMatching}
               onOpenCrossView={handleOpenCrossView}
               onOpenStructured={() => setStructuredModalOpen(true)}
-              modelOptions={modelOptions}
-              selectedModel={selectedModel}
-              setSelectedModel={setSelectedModel}
               selectedHeatmapCell={cellDetail ? { rowIndex: cellDetail.rowIndex, colIndex: cellDetail.colIndex } : null}
               onHeatmapCellClick={handleHeatmapCellClick}
             />
@@ -397,9 +394,7 @@ export default function Dashboard() {
 
           {activeMenu === 'CV Comparison' && (
             <CvComparisonSection
-              modelOptions={modelOptions}
               selectedModel={selectedModel}
-              setSelectedModel={setSelectedModel}
               showNotify={showNotify}
             />
           )}

@@ -1,6 +1,5 @@
 import type { UploadedFile } from '../../../types/dashboard';
 import type { MatchingResult } from '../../../types/matching';
-import type { ModelOption } from '../../../types/model';
 import type { MatchingMeta } from '../../../hooks/useMatching';
 import FullDocumentPanel from '../matching/FullDocumentPanel';
 import HeatmapSection from '../matching/HeatmapSection';
@@ -23,9 +22,6 @@ interface CvJdMatchingSectionProps {
   onRunMatching: () => void;
   onOpenCrossView: (result: MatchingResult) => void;
   onOpenStructured: () => void;
-  modelOptions: ModelOption[];
-  selectedModel: string;
-  setSelectedModel: (model: string) => void;
   selectedHeatmapCell?: { rowIndex: number; colIndex: number } | null;
   onHeatmapCellClick?: (rowIndex: number, colIndex: number, score: number, result: MatchingResult) => void;
 }
@@ -47,9 +43,6 @@ export default function CvJdMatchingSection({
   onRunMatching,
   onOpenCrossView,
   onOpenStructured,
-  modelOptions,
-  selectedModel,
-  setSelectedModel,
   selectedHeatmapCell,
   onHeatmapCellClick,
 }: CvJdMatchingSectionProps) {
@@ -62,27 +55,6 @@ export default function CvJdMatchingSection({
       <div className="single-match-toolbar">
         <input type="file" accept=".pdf" onChange={(e) => onPreviewUpload(e, 'CV')} id="sm-cv" hidden />
         <input type="file" accept=".pdf" onChange={(e) => onPreviewUpload(e, 'JD')} id="sm-jd" hidden />
-
-        <div className="toolbar-group toolbar-left">
-          <label className="model-selector-label">
-            <span>Model AI</span>
-            <select
-              className="model-selector"
-              value={selectedModel}
-              onChange={(e) => setSelectedModel(e.target.value)}
-              disabled={matchingLoading || modelOptions.length === 0}
-              title="Chọn model AI để matching"
-            >
-              {modelOptions.length === 0 ? (
-                <option value="">Đang tải model...</option>
-              ) : (
-                modelOptions.map(opt => (
-                  <option key={opt.id} value={opt.id}>{opt.display_name}</option>
-                ))
-              )}
-            </select>
-          </label>
-        </div>
 
         <div className="toolbar-group toolbar-right">
           {matchingMeta?.elapsed_seconds != null && (

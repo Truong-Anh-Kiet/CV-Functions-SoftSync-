@@ -1497,6 +1497,7 @@ def _extract_cv_from_file_id(file_id: str, system_prompt: str, instruction: str)
         ],
         response_format=CVStructured,
         temperature=0,
+        max_tokens=settings.openai_max_tokens,
     )
     parsed = response.choices[0].message.parsed
     return parsed.model_dump()
@@ -1511,6 +1512,7 @@ def _extract_cv_from_text_with_prompt(cv_text: str, system_prompt: str, instruct
         ],
         response_format=CVStructured,
         temperature=0,
+        max_tokens=settings.openai_max_tokens,
     )
     parsed = response.choices[0].message.parsed
     return parsed.model_dump()
@@ -1702,6 +1704,7 @@ def extract_jd_from_pdf(file_id: str) -> dict:
         ],
         response_format=JDStructured,
         temperature=0,
+        max_tokens=settings.openai_max_tokens,
     )
     parsed = response.choices[0].message.parsed
     return parsed.model_dump()
@@ -1760,6 +1763,7 @@ def extract_jd_from_text(jd_text: str) -> dict:
         ],
         response_format=JDStructured,
         temperature=0,
+        max_tokens=settings.openai_max_tokens,
     )
     parsed = response.choices[0].message.parsed
     return parsed.model_dump()
@@ -1774,6 +1778,7 @@ def analyze_jd_text(jd_text: str) -> JDAnalysis:
         ],
         response_format=JDAnalysis,
         temperature=0,
+        max_tokens=settings.openai_max_tokens,
     )
     return response.choices[0].message.parsed
 
@@ -1794,5 +1799,6 @@ def analyze_jd_file(pdf_path: str) -> JDAnalysis:
         ],
         response_format=JDAnalysis,
         temperature=0,
+        max_tokens=settings.openai_max_tokens,
     )
     return response.choices[0].message.parsed

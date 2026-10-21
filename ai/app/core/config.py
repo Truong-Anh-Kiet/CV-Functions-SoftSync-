@@ -18,6 +18,7 @@ class Settings(BaseSettings):
         validation_alias="OPENAI_BASE_URL",
     )
     openai_model: str = Field(default="gpt-5.5", validation_alias="OPENAI_MODEL")
+    openai_max_tokens: int = Field(default=1200, validation_alias="OPENAI_MAX_TOKENS")
 
     models_dir: Path = Field(
         default_factory=lambda: _AI_ROOT / "checkpoints",

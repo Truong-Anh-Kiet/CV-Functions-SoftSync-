@@ -4,6 +4,7 @@ import type { UploadedFile } from '../../../types/dashboard';
 import { useCvComparison } from '../../../hooks/useCvComparison';
 import RankingDetailModal from '../modals/RankingDetailModal';
 import FileViewerModal from '../modals/FileViewerModal';
+import AiProcessingOverlay from '../AiProcessingOverlay';
 
 interface CvComparisonSectionProps {
   selectedModel: string;
@@ -337,6 +338,7 @@ export default function CvComparisonSection({
 
       <RankingDetailModal result={detailResult} onClose={() => setDetailResult(null)} />
       <FileViewerModal file={viewingFile} onClose={() => setViewingFile(null)} />
+      <AiProcessingOverlay active={cmp.loading} message="AI đang so sánh hai hồ sơ" />
     </div>
   );
 }

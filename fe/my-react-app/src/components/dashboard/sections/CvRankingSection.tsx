@@ -7,6 +7,7 @@ import RankingSummaryPanel from '../ranking/RankingSummaryPanel';
 import RankingResultsTable from '../ranking/RankingResultsTable';
 import RankingProgressBar from '../ranking/RankingProgressBar';
 import RankingDetailModal from '../modals/RankingDetailModal';
+import AiProcessingOverlay from '../AiProcessingOverlay';
 
 interface CvRankingSectionProps {
   selectedModel: string;
@@ -118,6 +119,7 @@ export default function CvRankingSection({
       />
 
       <RankingDetailModal result={detailResult} onClose={() => setDetailResult(null)} />
+      <AiProcessingOverlay active={ranking.loading} message="AI đang xếp hạng hồ sơ" />
     </div>
   );
 }

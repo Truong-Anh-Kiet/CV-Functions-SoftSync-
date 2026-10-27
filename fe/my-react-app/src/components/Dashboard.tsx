@@ -13,6 +13,7 @@ import type { SearchCvResult } from '../types/search';
 import { confirmSave, renameSavedCv, deleteSavedCv } from '../services/api';
 import Sidebar from './dashboard/Sidebar';
 import Toast from './dashboard/Toast';
+import AiProcessingOverlay from './dashboard/AiProcessingOverlay';
 import CvStorageSection from './dashboard/sections/CvStorageSection';
 import CvJdMatchingSection from './dashboard/sections/CvJdMatchingSection';
 import CvRankingSection from './dashboard/sections/CvRankingSection';
@@ -345,6 +346,14 @@ export default function Dashboard() {
           <h1>{activeMenu}</h1>
         </header>
         <Toast message={notification} />
+        <AiProcessingOverlay
+          active={matchingLoading || searchLoading || reindexLoading}
+          message={matchingLoading
+            ? 'AI đang phân tích CV và JD'
+            : searchLoading
+              ? 'AI đang tìm hồ sơ phù hợp'
+              : 'Đang chuẩn bị dữ liệu hồ sơ'}
+        />
         <div className="content-body">
           {activeMenu === 'CV Storage' && (
             <CvStorageSection
@@ -436,6 +445,11 @@ export default function Dashboard() {
             />
           )}
         </div>
+        <footer className="matrix-tribute" aria-label="A tribute to The Matrix Team">
+          <span className="matrix-tribute-rule" aria-hidden="true" />
+          <span>Thank The Matrix Team</span>
+          <span className="matrix-tribute-rule" aria-hidden="true" />
+        </footer>
       </main>
 
       <SavedCvsModal

@@ -4,7 +4,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Optional
 
-from openai import OpenAI
+from openai import APIStatusError, OpenAI
 from pydantic import BaseModel, Field
 
 from app.core.config import settings
@@ -211,20 +211,94 @@ Rules:
 """.strip()
 
 
-@lru_cache
-def get_client() -> OpenAI:
-    if not settings.openai_api_key:
+def _provider_candidates() -> list[str]:
+    keys = [settings.openai_api_key.strip()] if settings.openai_api_key.strip() else []
+    for key_number in range(2, 6):
+        key = getattr(settings, f"openai_fallback_api_key_{key_number}", "").strip()
+        if key and key not in keys:
+            keys.append(key)
+    if not keys:
         raise RuntimeError("OPENAI_API_KEY is not configured")
-    return OpenAI(
-        api_key=settings.openai_api_key,
-        base_url=settings.openai_base_url,
+    return keys
+
+
+_uploaded_file_keys: dict[str, str] = {}
+
+
+@lru_cache(maxsize=16)
+def _client_for_key(api_key: str) -> OpenAI:
+    return OpenAI(api_key=api_key, base_url=settings.openai_base_url)
+
+
+def get_client() -> OpenAI:
+    return _client_for_key(_provider_candidates()[0][0])
+
+
+def _is_quota_error(error: APIStatusError) -> bool:
+    if error.status_code in (402, 429):
+        return True
+    body = getattr(error, "body", None)
+    detail = str(body).lower()
+    return error.status_code in (400, 403) and any(
+        marker in detail
+        for marker in ("quota", "rate limit", "rate_limit", "credits", "insufficient_balance", "billing")
     )
 
 
+def _parse_with_fallback(response_format: type[BaseModel], **request) -> object:
+    candidates = _provider_candidates()
+    preferred_key = _find_uploaded_file_key(request.get("messages", []))
+    if preferred_key in candidates:
+        candidates = [preferred_key, *(key for key in candidates if key != preferred_key)]
+    last_error: APIStatusError | None = None
+    for api_key in candidates:
+        try:
+            return _client_for_key(api_key).beta.chat.completions.parse(
+                model=settings.openai_model,
+                response_format=response_format,
+                **request,
+            )
+        except APIStatusError as error:
+            if not _is_quota_error(error):
+                raise
+            last_error = error
+    if last_error:
+        raise last_error
+    raise RuntimeError("No OpenAI-compatible provider is configured")
+
+
+def _find_uploaded_file_key(value: object) -> str | None:
+    if isinstance(value, dict):
+        file_id = value.get("file_id")
+        if isinstance(file_id, str) and file_id in _uploaded_file_keys:
+            return _uploaded_file_keys[file_id]
+        for nested in value.values():
+            key = _find_uploaded_file_key(nested)
+            if key:
+                return key
+    elif isinstance(value, (list, tuple)):
+        for nested in value:
+            key = _find_uploaded_file_key(nested)
+            if key:
+                return key
+    return None
+
+
 def upload_pdf(pdf_path: str) -> str:
-    with open(pdf_path, "rb") as file_obj:
-        uploaded = get_client().files.create(file=file_obj, purpose="user_data")
-    return uploaded.id
+    last_error: APIStatusError | None = None
+    for api_key in _provider_candidates():
+        try:
+            with open(pdf_path, "rb") as file_obj:
+                uploaded = _client_for_key(api_key).files.create(file=file_obj, purpose="user_data")
+            _uploaded_file_keys[uploaded.id] = api_key
+            return uploaded.id
+        except APIStatusError as error:
+            if not _is_quota_error(error):
+                raise
+            last_error = error
+    if last_error:
+        raise last_error
+    raise RuntimeError("No OpenAI-compatible provider is configured")
 
 
 _SKILLS_SECTION_PATTERNS = (
@@ -1483,8 +1557,8 @@ def _postprocess_cv_structured(parsed: dict, cv_text: Optional[str] = None) -> d
 
 
 def _extract_cv_from_file_id(file_id: str, system_prompt: str, instruction: str) -> dict:
-    response = get_client().beta.chat.completions.parse(
-        model=settings.openai_model,
+    response = _parse_with_fallback(
+        CVStructured,
         messages=[
             {"role": "system", "content": system_prompt},
             {
@@ -1495,7 +1569,6 @@ def _extract_cv_from_file_id(file_id: str, system_prompt: str, instruction: str)
                 ],
             },
         ],
-        response_format=CVStructured,
         temperature=0,
         max_tokens=settings.openai_max_tokens,
     )
@@ -1504,13 +1577,12 @@ def _extract_cv_from_file_id(file_id: str, system_prompt: str, instruction: str)
 
 
 def _extract_cv_from_text_with_prompt(cv_text: str, system_prompt: str, instruction: str) -> dict:
-    response = get_client().beta.chat.completions.parse(
-        model=settings.openai_model,
+    response = _parse_with_fallback(
+        CVStructured,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": f"{instruction}\n\n{cv_text}"},
         ],
-        response_format=CVStructured,
         temperature=0,
         max_tokens=settings.openai_max_tokens,
     )
@@ -1690,8 +1762,8 @@ def extract_cv(file_id: str) -> dict:
 
 
 def extract_jd_from_pdf(file_id: str) -> dict:
-    response = get_client().beta.chat.completions.parse(
-        model=settings.openai_model,
+    response = _parse_with_fallback(
+        JDStructured,
         messages=[
             {"role": "system", "content": JD_SYSTEM_PROMPT},
             {
@@ -1702,7 +1774,6 @@ def extract_jd_from_pdf(file_id: str) -> dict:
                 ],
             },
         ],
-        response_format=JDStructured,
         temperature=0,
         max_tokens=settings.openai_max_tokens,
     )
@@ -1755,13 +1826,12 @@ def extract_cv_from_text(cv_text: str) -> dict:
 
 
 def extract_jd_from_text(jd_text: str) -> dict:
-    response = get_client().beta.chat.completions.parse(
-        model=settings.openai_model,
+    response = _parse_with_fallback(
+        JDStructured,
         messages=[
             {"role": "system", "content": JD_SYSTEM_PROMPT},
             {"role": "user", "content": jd_text},
         ],
-        response_format=JDStructured,
         temperature=0,
         max_tokens=settings.openai_max_tokens,
     )
@@ -1770,13 +1840,12 @@ def extract_jd_from_text(jd_text: str) -> dict:
 
 
 def analyze_jd_text(jd_text: str) -> JDAnalysis:
-    response = get_client().beta.chat.completions.parse(
-        model=settings.openai_model,
+    response = _parse_with_fallback(
+        JDAnalysis,
         messages=[
             {"role": "system", "content": JD_ANALYSIS_SYSTEM_PROMPT},
             {"role": "user", "content": jd_text},
         ],
-        response_format=JDAnalysis,
         temperature=0,
         max_tokens=settings.openai_max_tokens,
     )
@@ -1785,8 +1854,8 @@ def analyze_jd_text(jd_text: str) -> JDAnalysis:
 
 def analyze_jd_file(pdf_path: str) -> JDAnalysis:
     file_id = upload_pdf(pdf_path)
-    response = get_client().beta.chat.completions.parse(
-        model=settings.openai_model,
+    response = _parse_with_fallback(
+        JDAnalysis,
         messages=[
             {"role": "system", "content": JD_ANALYSIS_SYSTEM_PROMPT},
             {
@@ -1797,7 +1866,6 @@ def analyze_jd_file(pdf_path: str) -> JDAnalysis:
                 ],
             },
         ],
-        response_format=JDAnalysis,
         temperature=0,
         max_tokens=settings.openai_max_tokens,
     )

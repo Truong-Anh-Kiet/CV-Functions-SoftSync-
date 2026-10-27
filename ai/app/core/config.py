@@ -18,6 +18,11 @@ class Settings(BaseSettings):
         validation_alias="OPENAI_BASE_URL",
     )
     openai_model: str = Field(default="gpt-5.5", validation_alias="OPENAI_MODEL")
+    # Additional API keys used in order when the active key is out of quota.
+    openai_fallback_api_key_2: str = Field(default="", validation_alias="OPENAI_FALLBACK_API_KEY_2")
+    openai_fallback_api_key_3: str = Field(default="", validation_alias="OPENAI_FALLBACK_API_KEY_3")
+    openai_fallback_api_key_4: str = Field(default="", validation_alias="OPENAI_FALLBACK_API_KEY_4")
+    openai_fallback_api_key_5: str = Field(default="", validation_alias="OPENAI_FALLBACK_API_KEY_5")
     openai_max_tokens: int = Field(default=4000, validation_alias="OPENAI_MAX_TOKENS")
 
     models_dir: Path = Field(

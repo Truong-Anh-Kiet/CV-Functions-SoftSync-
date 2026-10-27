@@ -81,9 +81,13 @@ See `.env.example`. Notable:
 | ---------------------- | ---------------- | ----------------------------------------- |
 | `OPENAI_API_KEY`       | —                | Structured extraction (required)          |
 | `OPENAI_MODEL`         | `gpt-4o-mini`    | Extraction model                          |
+| `OPENAI_FALLBACK_API_KEY_2`–`_5` | empty | Separate backup keys tried in numeric order |
+| `OPENAI_MAX_TOKENS`    | `4000`           | Maximum extraction response length        |
 | `DEFAULT_MODEL_ID`     | `cross_weighted` | Default matching model                    |
 | `AI_DEVICE`            | `auto`           | `auto` / `cpu` / `cuda`                   |
 | `TORCH_NUM_THREADS`    | `0` (auto ≤ 8)   | CPU threads (torch's default over-subscribes) |
 | `INFERENCE_PAIR_CHUNK` | `6`              | Length-bucketing chunk size (0 = off)     |
 | `EXTRACTION_CACHE`     | `true`           | Cache extraction by content hash          |
+
+Set each backup key in its own variable (`OPENAI_FALLBACK_API_KEY_2`, `OPENAI_FALLBACK_API_KEY_3`, and so on). They use the same `OPENAI_BASE_URL` and `OPENAI_MODEL` as the primary key and are tried in numeric order when the provider reports a quota or rate limit error (HTTP 402/429 and quota-related 400/403 responses).
 ```
